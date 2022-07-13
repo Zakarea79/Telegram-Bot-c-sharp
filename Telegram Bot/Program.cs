@@ -15,7 +15,16 @@ namespace Telegram_Bot
         {
             long ofset = 0;
             string url = $"https://api.telegram.org/bot{Token}/";
-
+            var b = new keyBord();
+            b.keyboard = new List<List<KeyboardItemItem>>();
+            b.keyboard.Add(new List<KeyboardItemItem>
+                            {
+                                new KeyboardItemItem(){text = "ky1"}
+                            });
+            b.one_time_keyboard = true;
+            b.resize_keyboard = true;
+            WriteLine(JsonConvert.SerializeObject(b));
+            return;
             while (true)
             {
                 try
@@ -98,6 +107,7 @@ namespace Telegram_Bot
                         }
                         else if (item.message.sticker != null)
                         {
+                            //https://api.telegram.org/bot<token>/sendSticker?chat_id=<id>&sticker=CAADAgADOQADfyesDlKEqOOd72VKAg
                             WriteLine(Upload(new FileUploadInfo
                             {
                                 Token = Token,
@@ -119,6 +129,20 @@ namespace Telegram_Bot
                                 Chat_Id = item.message.chat.id,
                                 PathFile = @"C:\Users\SZA\Desktop\Untitled-1.jpg"
                             }, TypeMessage.photo));
+                        }
+                        else if (item.message.text == "audio") 
+                        {
+                            WriteLine(Upload(new FileUploadInfo
+                            {
+                                Token = Token,
+                                Chat_Id = item.message.chat.id,
+                                PathFile = @"C:\Users\SZA\Desktop\Fighting Demons\Eminem Speaks.mp3"
+                            }, TypeMessage.audio));
+                        }
+                        else if(item.message.text == "map") 
+                        {
+                            Client.DownloadString($"https://api.telegram.org/bot{Token}/sendLocation?chat_id={item.message.chat.id}&longitude=32.65465&latitude=32.6546");
+                            //Client.DownloadString($"https://api.telegram.org/bot{Token}/sendlocation?chat_id={item.message.chat.id}&latitude=51.6680&longitude=32.6546");
                         }
                         else 
                         {
